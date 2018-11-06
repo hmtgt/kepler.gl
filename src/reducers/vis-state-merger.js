@@ -356,7 +356,7 @@ export function validateSavedVisualChannels(
  * @param {Object} layerClasses
  * @return {null | Object} - validated layer or null
  */
-export function validateLayerWithData({fields, id: dataId, allData}, savedLayer, layerClasses) {
+export function validateLayerWithData({fields, id: dataId, allData, isTiled}, savedLayer, layerClasses) {
   const {type} = savedLayer;
   // layer doesnt have a valid type
   if (
@@ -373,7 +373,8 @@ export function validateLayerWithData({fields, id: dataId, allData}, savedLayer,
     allData,
     label: savedLayer.config.label,
     color: savedLayer.config.color,
-    isVisible: savedLayer.config.isVisible
+    isVisible: savedLayer.config.isVisible,
+    isTiled
   });
 
   // find column fieldIdx
