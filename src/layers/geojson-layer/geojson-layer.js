@@ -246,7 +246,7 @@ export default class GeoJsonLayer extends Layer {
     return {
       data: geojsonData,
       getFeature,
-      getFillColor: d => 
+      getFillColor: d =>
         cScale
           ? this.getEncodedChannelValue(
               cScale,
@@ -280,7 +280,7 @@ export default class GeoJsonLayer extends Layer {
               0
             )
           : d.properties.elevation || 500,
-      getRadius: d => 
+      getRadius: d =>
         rScale
           ? this.getEncodedChannelValue(
               rScale,

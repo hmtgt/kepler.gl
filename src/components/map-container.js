@@ -285,6 +285,9 @@ export default function MapContainerFactory(MapPopover, MapControl) {
       const layer = layers[idx];
       const data = layerData[idx];
 
+      // TODO: check if this is a tile data layer, 
+      // if so, we call formatLayer...(with the correct allData)
+
       const layerInteraction = {
         mousePosition
       };
