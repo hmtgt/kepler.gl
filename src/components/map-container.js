@@ -229,8 +229,8 @@ export default function MapContainerFactory(MapPopover, MapControl) {
       }
 
       const {config: {dataId}} = layer;
-      const {allData, fields} = datasets[dataId];
-      const data = layer.getHoverData(object, allData);
+      const {fields} = datasets[dataId];
+      const data = layer.getHoverData(object);
 
       // project lnglat to screen so that tooltip follows the object on zoom
       const {viewport} = overlay.context;

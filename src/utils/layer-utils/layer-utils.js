@@ -37,7 +37,7 @@ export function findDefaultLayer(dataset, layerClasses) {
     const layerProps = layerClasses[lc].findDefaultLayerProps(dataset);
     if (layerProps) {
       const found = (Array.isArray(layerProps) ? layerProps : [layerProps])
-        .map(props => new layerClasses[lc]({...props, dataId: dataset.id}));
+        .map(props => new layerClasses[lc]({...props, dataId: dataset.id, allData: dataset.allData}));
       layers = layers.concat(found);
     }
   });
@@ -58,7 +58,7 @@ export function calculateLayerData(layer, state, oldLayerData, opt = {}) {
   const {type} = layer;
   const {datasets} = state;
 
-  const {data, filteredIndex, allData} = datasets[layer.config.dataId] || {};
+  const {data, filteredIndex} = datasets[layer.config.dataId] || {};
 
   if (!type || !layer.hasAllColumns()) {
     return {layer, layerData: {}};
@@ -66,7 +66,6 @@ export function calculateLayerData(layer, state, oldLayerData, opt = {}) {
 
   const layerData = layer.formatLayerData(
     data,
-    allData,
     filteredIndex,
     oldLayerData,
     opt

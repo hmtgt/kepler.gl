@@ -147,7 +147,8 @@ export default class IconLayer extends Layer {
     return props;
   }
 
-  formatLayerData(_, allData, filteredIndex, oldLayerData, opt = {}) {
+  formatLayerData(_, filteredIndex, oldLayerData, opt = {}) {
+    const {allData} = this;
     const {
       colorScale,
       colorDomain,

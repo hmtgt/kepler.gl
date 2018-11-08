@@ -169,7 +169,7 @@ export function layerTypeChangeUpdater(state, action) {
   // get a mint layer, with new id and type
   // because deck.gl uses id to match between new and old layer.
   // If type has changed but id is the same, it will break
-  const newLayer = new state.layerClasses[newType]();
+  const newLayer = new state.layerClasses[newType]({allData: oldLayer.allData});
 
   newLayer.assignConfigToLayer(oldLayer.config, oldLayer.visConfigSettings);
 
@@ -445,6 +445,7 @@ export const addLayerUpdater = (state, action) => {
     isVisible: true,
     isConfigActive: true,
     dataId: defaultDataset,
+    allData: state.datasets[defaultDataset].allData,
     ...action.props
   });
 
