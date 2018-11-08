@@ -242,15 +242,7 @@ export default class GeoJsonLayer extends Layer {
     const rScale =
       radiusField &&
       this.getVisChannelScale(radiusScale, radiusDomain, radiusRange);
-    
-    // get all the field
-    const fields = [];
-    if (allData && allData[0] && allData[0][0] && allData[0][0].properties) {
-      Object.keys(allData[0][0].properties).forEach(key => {
-        fields.push(key);
-      });
-    }
-    
+
     return {
       data: geojsonData,
       getFeature,
