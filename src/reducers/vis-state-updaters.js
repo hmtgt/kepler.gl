@@ -89,10 +89,15 @@ export const INITIAL_VIS_STATE = {
 
   layerBlending: 'normal',
   hoverInfo: undefined,
+  clickShiftKey: undefined,
+  clickLngLat: undefined,
   clicked: undefined,
 
   fileLoading: false,
   fileLoadingErr: null,
+
+  streetviewPosition: undefined, //{lat: 0, lng: 0},
+  streetviewPov: {heading: 0, pitch: 0},
 
   // this is used when user split maps
   splitMaps: [
@@ -602,7 +607,19 @@ export const layerClickUpdater = (state, action) => ({
 
 export const mapClickUpdater = (state, action) => ({
   ...state,
+  streetviewPosition: action.shiftKey ? {lat: action.lngLat[1], lng: action.lngLat[0]} : state.streetviewPosition,
+  clickShiftKey: action.shiftKey,
   clicked: null
+});
+
+export const updateStreetviewPositionUpdater = (state, action) => ({
+  ...state,
+  streetviewPosition: action.streetviewPosition
+});
+
+export const updateStreetviewPovUpdater = (state, action) => ({
+  ...state,
+  streetviewPov: action.streetviewPov
 });
 
 export const toggleSplitMapUpdater = (state, action) =>

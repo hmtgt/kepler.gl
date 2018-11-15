@@ -176,6 +176,7 @@ function KeplerGlFactory(
         width,
         height,
         mapboxApiAccessToken,
+        googleApiKey,
 
         // redux state
         mapStyle,
@@ -226,6 +227,9 @@ function KeplerGlFactory(
       const mapFields = {
         datasets,
         mapboxApiAccessToken,
+        googleApiKey,
+        uiState,
+        visState,
         mapState,
         mapStyle,
         mapControls: uiState.mapControls,

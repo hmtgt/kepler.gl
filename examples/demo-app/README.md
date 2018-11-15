@@ -17,6 +17,11 @@ add mapbox access token to node env
 export MapboxAccessToken=<your_mapbox_token>
 ```
 
+add google api key to node env
+```
+export GoogleApiKey=<insert_your_key>
+```
+
 then
 ```
 npm start

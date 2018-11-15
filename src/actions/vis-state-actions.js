@@ -143,6 +143,20 @@ export function updateVisData(datasets, options, config) {
   };
 }
 
+export function updateStreetviewPosition(position) {
+  return {
+    type: ActionTypes.UPDATE_STREETVIEW_POSITION,
+    streetviewPosition: {lat: position.lat(), lng: position.lng()}
+  };
+}
+
+export function updateStreetviewPov(pov) {
+  return {
+    type: ActionTypes.UPDATE_STREETVIEW_POV,
+    streetviewPov: pov
+  };
+}
+
 export function toggleAnimation(idx) {
   return {
     type: ActionTypes.TOGGLE_FILTER_ANIMATION,
@@ -179,9 +193,11 @@ export function onLayerClick(info) {
   };
 }
 
-export function onMapClick() {
+export function onMapClick(e) {
   return {
-    type: ActionTypes.MAP_CLICK
+    type: ActionTypes.MAP_CLICK,
+    lngLat: e.lngLat,
+    shiftKey: e.srcEvent.shiftKey
   };
 }
 

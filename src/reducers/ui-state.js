@@ -66,6 +66,10 @@ export const DEFAULT_MAP_CONTROLS = {
   },
   splitMap: {
     show: true
+  },
+  streetview: {
+    show: true,
+    active: false
   }
 };
 

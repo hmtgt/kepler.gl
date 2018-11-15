@@ -89,7 +89,8 @@ const COMMON_CONFIG = {
 
   // Optional: Enables reading mapbox token from environment variable
   plugins: [
-    new webpack.EnvironmentPlugin(['MapboxAccessToken'])
+    new webpack.EnvironmentPlugin(['MapboxAccessToken']),
+    new webpack.EnvironmentPlugin(['GoogleApiKey'])
   ]
 };
 
@@ -144,6 +145,10 @@ module.exports = env => {
       logInstruction(`Make sure to run "export MapboxAccessToken=<token>" before deploy the website`);
       logInstruction('You can get the token at http://t.uber.com/kepler.gl-token');
       throw new Error('Missing Mapbox Access token');
+    }
+    if (!process.env.GoogleApiKey) {
+      logError('Error! GoogleApiKey is not defined');
+      throw new Error('Missing Google API Key');
     }
     config = addProdConfig(config);
   }

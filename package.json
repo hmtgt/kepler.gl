@@ -95,6 +95,7 @@
     "react-onclickoutside": "https://registry.npmjs.org/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz",
     "react-palm": "^1.1.2",
     "react-redux": "^4.0.0",
+    "react-streetview": "^1.1.1",
     "react-tooltip": "https://registry.npmjs.org/react-tooltip/-/react-tooltip-3.3.0.tgz",
     "react-vis": "^1.8.0",
     "redux": "^3.0.4",

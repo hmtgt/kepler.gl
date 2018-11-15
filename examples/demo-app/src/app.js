@@ -33,6 +33,7 @@ const KeplerGl = require('kepler.gl/components').injectComponents([
 ]);
 
 const MAPBOX_TOKEN = process.env.MapboxAccessToken; // eslint-disable-line
+const GOOGLE_API_KEY = process.env.GoogleApiKey; // eslint-disable-line
 
 // Sample data
 /* eslint-disable no-unused-vars */
@@ -209,6 +210,7 @@ class App extends Component {
         >
           <KeplerGl
             mapboxApiAccessToken={MAPBOX_TOKEN}
+            googleApiKey={GOOGLE_API_KEY}
             id="map"
             /*
              * Specify path to keplerGl state, because it is not mount at the root

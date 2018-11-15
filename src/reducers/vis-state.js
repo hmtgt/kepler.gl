@@ -52,7 +52,9 @@ import {
   setVisibleLayersForMapUpdater,
   toggleLayerForMapUpdater,
   layerVisConfigChangeUpdater,
-  layerVisualChannelChangeUpdater
+  layerVisualChannelChangeUpdater,
+  updateStreetviewPositionUpdater,
+  updateStreetviewPovUpdater,
 } from './vis-state-updaters';
 
 const actionHandler = {
@@ -111,6 +113,10 @@ const actionHandler = {
   [ActionTypes.TOGGLE_SPLIT_MAP]: toggleSplitMapUpdater,
 
   [ActionTypes.UPDATE_LAYER_BLENDING]: updateLayerBlendingUpdater,
+
+  [ActionTypes.UPDATE_STREETVIEW_POSITION]: updateStreetviewPositionUpdater,
+
+  [ActionTypes.UPDATE_STREETVIEW_POV]: updateStreetviewPovUpdater,
 
   // currently not used
   // but may be useful if users import vist state reducer

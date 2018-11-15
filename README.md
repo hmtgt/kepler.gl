@@ -31,6 +31,8 @@ npm install --save kepler.gl
 
 Get a [Mapbox Access Token](https://www.mapbox.com/help/define-access-token/).
 
+Get a [Google API Key](https://developers.google.com/maps/documentation/javascript/get-api-key) if you use a street view.
+
 ### Local dev
 ```
 npm install
@@ -42,6 +44,8 @@ yarn --ignore-engines
 then
 ```
 export MapboxAccessToken=<insert_your_token>
+
+export GoogleApiKey=<insert_your_key>
 
 npm start
 ```

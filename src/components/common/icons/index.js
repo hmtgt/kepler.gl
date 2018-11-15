@@ -54,6 +54,8 @@ export {default as Reset} from './reset';
 export {default as Save} from './save';
 export {default as Share} from './share';
 export {default as SquareSelect} from './square-select';
+export {default as Streetview} from './streetview';
+export {default as StreetviewIcon} from './streetview-icon';
 export {default as Settings} from './settings';
 export {default as Search} from './search';
 export {default as Split} from './split';

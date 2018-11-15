@@ -22,6 +22,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createSelector} from 'reselect';
 import styled from 'styled-components';
+import ReactStreetview from 'react-streetview';
 
 import {Tooltip, IconRoundSmall} from 'components/common/styled-components';
 import MapLayerSelector from 'components/common/map-layer-selector';
@@ -33,7 +34,8 @@ import {
   Legend,
   Cube3d,
   Delete,
-  Layers
+  Layers,
+  Streetview
 } from 'components/common/icons';
 
 const StyledMapControl = styled.div`
@@ -173,12 +175,15 @@ export class MapControl extends Component {
     onTogglePerspective: PropTypes.func.isRequired,
     onToggleSplitMap: PropTypes.func.isRequired,
     onToggleMapControl: PropTypes.func.isRequired,
+    onStreetviewPovChanged: PropTypes.func.isRequired,
+    onStreetviewPositionChanged: PropTypes.func.isRequired,
     onMapToggleLayer: PropTypes.func.isRequired,
     top: PropTypes.number.isRequired,
 
     // optional
     scale: PropTypes.number,
-    mapLayers: PropTypes.object
+    mapLayers: PropTypes.object,
+    clickLngLat: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {
@@ -212,15 +217,26 @@ export class MapControl extends Component {
       onToggleSplitMap,
       onMapToggleLayer,
       onToggleMapControl,
-      scale
+      onStreetviewPovChanged,
+      onStreetviewPositionChanged,
+      scale,
+      streetviewPosition,
+      googleApiKey
     } = this.props;
 
     const {
       visibleLayers = {},
       mapLegend = {},
       toggle3d = {},
-      splitMap = {}
+      splitMap = {},
+      streetview = {}
     } = mapControls;
+
+    const streetViewPanoramaOptions = {
+      position: streetviewPosition,
+      pov: {heading: 0, pitch: 0},
+      zoom: 1
+    };
 
     return (
       <StyledMapControl className="map-control">
@@ -296,6 +312,20 @@ export class MapControl extends Component {
             />
           </ActionPanel>
         ) : null}
+
+        {/* Streetview */}
+        {streetview.show ? (
+          <ActionPanel key={4}>
+            <StreetviewPanel
+              isActive={streetview.active}
+              apiKey={googleApiKey}
+              streetViewPanoramaOptions={streetViewPanoramaOptions}
+              toggleMenuPanel={() => onToggleMapControl('streetview')}
+              onPositionChanged={onStreetviewPositionChanged}
+              onPovChanged={onStreetviewPovChanged}
+            />
+          </ActionPanel>
+        ) : null}
       </StyledMapControl>
     );
   }
@@ -323,6 +353,45 @@ const MapControlPanel = ({children, header, onClick, scale = 1, isExport}) => (
     <StyledMapControlPanelContent>{children}</StyledMapControlPanelContent>
   </StyledMapControlPanel>
 );
+
+const StreetviewPanel = ({isActive, streetViewPanoramaOptions, apiKey, toggleMenuPanel, onPositionChanged, onPovChanged}) =>
+  !isActive ? (
+    <StyledMapControlButton
+      key={3}
+      data-tip
+      data-for="show-streetview"
+      className="map-control-button show-streetview"
+      onClick={e => {
+        e.preventDefault();
+        toggleMenuPanel();
+      }}
+    >
+      <Streetview height="22px" style={{marginLeft: 'auto'}} />
+      <MapLegendTooltip id="show-streetview" message={'show streetview'} />
+    </StyledMapControlButton>
+  ) : (
+    <MapControlPanel
+      header={'Streetview'}
+      onClick={toggleMenuPanel}
+    >
+      <div style={{
+          width: '600px',
+          height: '450px',
+          color: '#fff'
+        }}>
+        {streetViewPanoramaOptions.position ? (
+          <ReactStreetview
+          apiKey={apiKey}
+          streetViewPanoramaOptions={streetViewPanoramaOptions}
+          onPositionChanged={onPositionChanged}
+          onPovChanged={onPovChanged}
+        />
+        ) : (
+          <p style={{padding: '16px'}}>Set a position into Street View to shift click on a map!</p>
+        )}
+      </div>
+    </MapControlPanel>
+  );
 
 const MapLegendPanel = ({items, isActive, scale, toggleMenuPanel, isExport}) =>
   !isActive ? (

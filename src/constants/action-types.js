@@ -51,6 +51,8 @@ const ActionTypes = keyMirror({
   SET_FILTER_PLOT: null,
   LOAD_FILES: null,
   LOAD_FILES_ERR: null,
+  UPDATE_STREETVIEW_POV: null,
+  UPDATE_STREETVIEW_POSITION: null,
 
   // mapState
   UPDATE_MAP: null,

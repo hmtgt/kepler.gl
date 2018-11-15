@@ -21,7 +21,7 @@
 // libraries
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import MapboxGLMap from 'react-map-gl';
+import MapboxGLMap, {Marker} from 'react-map-gl';
 import DeckGL from 'deck.gl';
 import {GL} from 'luma.gl';
 import {registerShaderModules, setParameters} from 'luma.gl';
@@ -32,6 +32,7 @@ import brushingModule from 'shaderlib/brushing-module';
 import MapPopoverFactory from 'components/map/map-popover';
 import MapControlFactory from 'components/map/map-control';
 import {StyledMapContainer} from 'components/common/styled-components';
+import {StreetviewIcon} from 'components/common/icons';
 
 // Overlay type
 import {generateMapboxLayers, updateMapboxLayers} from '../layers/mapbox-utils';
@@ -72,6 +73,7 @@ export default function MapContainerFactory(MapPopover, MapControl) {
       mapControls: PropTypes.object.isRequired,
       mapboxApiAccessToken: PropTypes.string.isRequired,
       toggleMapControl: PropTypes.func.isRequired,
+      visState: PropTypes.object.isRequired,
       visStateActions: PropTypes.object.isRequired,
       mapStateActions: PropTypes.object.isRequired,
 
@@ -140,6 +142,14 @@ export default function MapContainerFactory(MapPopover, MapControl) {
     _handleMapToggleLayer = layerId => {
       const {index: mapIndex = 0, visStateActions} = this.props;
       visStateActions.toggleLayerForMap(mapIndex, layerId);
+    };
+
+    _handleStreetviewPovChanged = streetviewPov => {
+      this.props.visStateActions.updateStreetviewPov(streetviewPov);
+    };
+
+    _handleStreetviewPositionChanged = streetviewPosition => {
+      this.props.visStateActions.updateStreetviewPosition(streetviewPosition);
     };
 
     _setMapboxMap = (mapbox) => {
@@ -379,12 +389,30 @@ export default function MapContainerFactory(MapPopover, MapControl) {
       }
     }
 
+    _renderPegman(active) {
+      const {visState, mapState} = this.props;
+      const {bearing} = mapState;
+      const {streetviewPosition, streetviewPov} = visState;
+      const {heading} = streetviewPov;
+      if (!streetviewPosition) return null;
+      return (
+        <Marker latitude={streetviewPosition.lat} longitude={streetviewPosition.lng} offsetLeft={-16} offsetTop={-16}>
+          <div>
+            <StreetviewIcon height={'32px'} width={'32px'} style={{transform: `rotate(${heading - bearing}deg)`, opacity: active ? 1 : 0.5}} />
+          </div>
+        </Marker>
+      );
+    }
+
     render() {
       const {
-        mapState, mapStyle, mapStateActions, mapLayers, layers, MapComponent,
-        datasets, mapboxApiAccessToken, mapControls, toggleMapControl
+        mapState, mapStyle, mapStateActions, visState, visStateActions, mapLayers, layers, MapComponent,
+        datasets, mapboxApiAccessToken, mapControls, toggleMapControl, googleApiKey, uiState
       } = this.props;
-      const {updateMap, onMapClick} = mapStateActions;
+      const {updateMap} = mapStateActions;
+      const {onMapClick} = visStateActions;
+      const {streetviewPosition} = visState;
+      const {mapControls: {streetview}} = uiState;
 
       if (!mapStyle.bottomMapStyle) {
         // style not yet loaded
@@ -411,22 +439,27 @@ export default function MapContainerFactory(MapPopover, MapControl) {
             mapLayers={mapLayers}
             mapControls={mapControls}
             scale={mapState.scale || 1}
+            streetviewPosition={streetviewPosition}
             top={0}
+            googleApiKey={googleApiKey}
             onTogglePerspective={mapStateActions.togglePerspective}
             onToggleSplitMap={mapStateActions.toggleSplitMap}
             onMapToggleLayer={this._handleMapToggleLayer}
             onToggleFullScreen={mapStateActions.toggleFullScreen}
             onToggleMapControl={toggleMapControl}
+            onStreetviewPositionChanged={this._handleStreetviewPositionChanged}
+            onStreetviewPovChanged={this._handleStreetviewPovChanged}
           />
           <MapComponent
             {...mapProps}
             key="bottom"
             ref={this._setMapboxMap}
             mapStyle={mapStyle.bottomMapStyle}
-            onClick={onMapClick}
+            onClick={streetview.active ? null : onMapClick}
             getCursor={this.props.hoverInfo ? () => 'pointer' : undefined}
           >
             {this._renderOverlay()}
+            {this._renderPegman(streetview.active)}
             {this._renderMapboxOverlays()}
           </MapComponent>
           {mapStyle.topMapStyle && (
